@@ -90,7 +90,7 @@ def run_rag(question: str) -> tuple[str, list[Document], list[str]]:
     trace: list[str] = []
     model = get_chat_model()
 
-    with _llmobs_workflow("travel_rag_workflow"):
+    with _llmobs_workflow("travel_rag_workflow") as workflow_span:
         planner_chain = (PLANNER_PROMPT | model).with_config({"run_name": "planner_agent"})
         with _llmobs_task("planner_agent"), _agent_span("agent.planner") as planner_span:
             if planner_span is not None:
@@ -146,5 +146,12 @@ def run_rag(question: str) -> tuple[str, list[Document], list[str]]:
                     output_data=answer,
                     tags={"agent": "city_expert"},
                 )
+        if LLMObs is not None and workflow_span is not None:
+            LLMObs.annotate(
+                span=workflow_span,
+                input_data=question,
+                output_data=answer,
+                tags={"agent": "workflow"},
+            )
         trace.append("city_expert_agent: 최종 여행 코스를 생성했습니다.")
         return answer, docs, trace

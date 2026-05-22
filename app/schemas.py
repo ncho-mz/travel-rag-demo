@@ -17,3 +17,4 @@ class ChatResponse(BaseModel):
     answer: str
     sources: List[SourceItem]
     latency_ms: int
+    agent_trace: List[str]

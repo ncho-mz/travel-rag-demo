@@ -13,7 +13,13 @@ def chat_fn(message, history):
 
     source_names = [src["source"] for src in data.get("sources", [])]
     source_text = ", ".join(source_names) if source_names else "없음"
-    answer = f"{data['answer']}\n\n(출처: {source_text} / {data['latency_ms']}ms)"
+    trace = data.get("agent_trace", [])
+    trace_text = " | ".join(trace) if trace else "trace 없음"
+    answer = (
+        f"{data['answer']}\n\n"
+        f"(출처: {source_text} / {data['latency_ms']}ms)\n"
+        f"(Agent Trace: {trace_text})"
+    )
     return answer
 
 

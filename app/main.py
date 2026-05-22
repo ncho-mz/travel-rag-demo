@@ -26,7 +26,7 @@ def health():
 @app.post("/chat", response_model=ChatResponse)
 def chat(payload: ChatRequest):
     started_at = time.time()
-    answer, docs = run_rag(payload.message)
+    answer, docs, trace = run_rag(payload.message)
     latency_ms = int((time.time() - started_at) * 1000)
 
     sources = [
@@ -36,4 +36,6 @@ def chat(payload: ChatRequest):
         )
         for doc in docs
     ]
-    return ChatResponse(answer=answer, sources=sources, latency_ms=latency_ms)
+    return ChatResponse(
+        answer=answer, sources=sources, latency_ms=latency_ms, agent_trace=trace
+    )

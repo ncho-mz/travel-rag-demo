@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+gradio
+requests
+langchain
+langchain-community
+langchain-openai
+langchain-aws
+boto3
+faiss-cpu
+pypdf
+python-dotenv
+tiktoken
